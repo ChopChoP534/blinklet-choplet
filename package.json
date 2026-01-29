@@ -1,0 +1,31 @@
+{
+  "name": "blinks-creator-choplet",
+  "version": "1.0.0",
+  "description": "No-Code Solana Blink Builder",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm start",
+    "client": "cd frontend && npm run dev",
+    "build": "cd frontend && npm run build",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
+  },
+  "keywords": [
+    "solana",
+    "blinks",
+    "mern",
+    "nextjs"
+  ],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "clsx": "^2.1.1",
+    "next-themes": "^0.4.6",
+    "sonner": "^2.0.7",
+    "tailwind-merge": "^3.4.0"
+  }
+}
