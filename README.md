@@ -42,31 +42,31 @@ A production-ready no-code platform for creating Solana Actions (Blinks) - oncha
 
 ### Backend Setup
 
-\`\`\`bash
+```bash
 cd backend
 npm install
-\`\`\`
+```
 
-Create a \`.env\` file based on \`.env.example\`:
+Create a `.env` file based on `.env.example`:
 
-\`\`\`bash
+```bash
 cp .env.example .env
-\`\`\`
+```
 
 Configure your environment variables (see Configuration section below).
 
 ### Frontend Setup
 
-\`\`\`bash
+```bash
 cd frontend
 npm install
-\`\`\`
+```
 
-Create a \`.env.local\` file:
+Create a `.env.local` file:
 
-\`\`\`bash
+```bash
 cp .env.example .env.local
-\`\`\`
+```
 
 Update with your backend API URL and share base URL.
 
@@ -76,66 +76,66 @@ Update with your backend API URL and share base URL.
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| \`PORT\` | Server port | \`3001\` |
-| \`NODE_ENV\` | Environment mode | \`development\` |
-| \`MONGO_URI\` | MongoDB connection string | \`mongodb://localhost:27017/blink-builder\` |
-| \`SOLANA_RPC_URL\` | Solana RPC endpoint | \`https://api.mainnet-beta.solana.com\` |
-| \`SOLANA_NETWORK\` | Network identifier | \`mainnet\` |
-| \`SOLANA_BLOCKCHAIN_ID\` | Blockchain ID for Actions spec | \`solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp\` |
-| \`CORS_ALLOWED_ORIGINS\` | Comma-separated allowed origins | \`*\` |
-| \`PRIORITY_FEE_MICRO_LAMPORTS\` | Transaction priority fee | \`100000\` |
-| \`JUPITER_QUOTE_API_URL\` | Jupiter quote endpoint | \`https://lite-api.jup.ag/swap/v1/quote\` |
-| \`JUPITER_SWAP_API_URL\` | Jupiter swap endpoint | \`https://lite-api.jup.ag/swap/v1/swap\` |
-| \`JUPITER_SLIPPAGE_BPS\` | Swap slippage tolerance (basis points) | \`50\` |
-| \`LOG_LEVEL\` | Logging level (error/warn/info/debug) | \`info\` |
+| `PORT` | Server port | `3001` |
+| `NODE_ENV` | Environment mode | `development` |
+| `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/blink-builder` |
+| `SOLANA_RPC_URL` | Solana RPC endpoint | `https://api.mainnet-beta.solana.com` |
+| `SOLANA_NETWORK` | Network identifier | `mainnet` |
+| `SOLANA_BLOCKCHAIN_ID` | Blockchain ID for Actions spec | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` |
+| `CORS_ALLOWED_ORIGINS` | Comma-separated allowed origins | `*` |
+| `PRIORITY_FEE_MICRO_LAMPORTS` | Transaction priority fee | `100000` |
+| `JUPITER_QUOTE_API_URL` | Jupiter quote endpoint | `https://lite-api.jup.ag/swap/v1/quote` |
+| `JUPITER_SWAP_API_URL` | Jupiter swap endpoint | `https://lite-api.jup.ag/swap/v1/swap` |
+| `JUPITER_SLIPPAGE_BPS` | Swap slippage tolerance (basis points) | `50` |
+| `LOG_LEVEL` | Logging level (error/warn/info/debug) | `info` |
 
 ### Frontend Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| \`NEXT_PUBLIC_API_URL\` | Backend API base URL | \`http://localhost:3001\` |
-| \`NEXT_PUBLIC_SHARE_BASE_URL\` | Frontend share URL | \`http://localhost:3000\` |
+| `NEXT_PUBLIC_API_URL` | Backend API base URL | `http://localhost:3001` |
+| `NEXT_PUBLIC_SHARE_BASE_URL` | Frontend share URL | `http://localhost:3000` |
 
 ## Development
 
 ### Start Backend Development Server
 
-\`\`\`bash
+```bash
 cd backend
 npm run dev
-\`\`\`
+```
 
-The backend will start on \`http://localhost:3001\` with hot reload enabled.
+The backend will start on `http://localhost:3001` with hot reload enabled.
 
 ### Start Frontend Development Server
 
-\`\`\`bash
+```bash
 cd frontend
 npm run dev
-\`\`\`
+```
 
-The frontend will start on \`http://localhost:3000\`.
+The frontend will start on `http://localhost:3000`.
 
 ### Type Checking
 
-\`\`\`bash
+```bash
 cd backend
 npm run type-check
-\`\`\`
+```
 
 ### Build for Production
 
-\`\`\`bash
+```bash
 cd backend
 npm run build
 npm start
-\`\`\`
+```
 
-\`\`\`bash
+```bash
 cd frontend
 npm run build
 npm start
-\`\`\`
+```
 
 ## Security Features
 
