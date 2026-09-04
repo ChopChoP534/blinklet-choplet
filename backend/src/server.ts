@@ -13,7 +13,13 @@ import {
   validateCreateBlinkMiddleware,
 } from './middleware/validation';
 import { errorHandler, AppError } from './middleware/errorHandler';
-import { getBaseUrl, parseAmount, parseTicketCount, getQueryString, getParamString } from './utils/helpers';
+import {
+  getBaseUrl,
+  parseAmount,
+  parseTicketCount,
+  getQueryString,
+  getParamString,
+} from './utils/helpers';
 import { CreateBlinkPayload } from './types';
 
 const app = express();
@@ -36,7 +42,7 @@ app.use(
     origin: config.cors.allowedOrigins[0] === '*' ? '*' : config.cors.allowedOrigins,
     methods: ['GET', 'POST', 'OPTIONS', 'DELETE', 'PUT'],
     allowedHeaders: ['Content-Type', 'Authorization', 'Content-Encoding', 'Accept-Encoding'],
-  })
+  }),
 );
 
 app.options('/api/actions/*', (_req, res) => {
@@ -52,7 +58,7 @@ app.options('/api/actions/:id/confirm_raffle', (_req, res) => {
 mongoose
   .connect(config.database.mongodb.uri)
   .then(() => {
-    logger.info('MongoDB connected', { uri: config.database.mongodb.uri });
+    logger.info('MongoDB connected');
   })
   .catch((err) => {
     logger.error('MongoDB connection failed', { error: err.message });
@@ -82,7 +88,10 @@ app.get('/api/actions/:id', async (req: Request, res: Response, next: NextFuncti
     ];
 
     if (settings.actions && Array.isArray(settings.actions) && settings.actions.length > 0) {
-      logger.debug('Mapping multiple actions', { blinkId: blink._id, count: settings.actions.length });
+      logger.debug('Mapping multiple actions', {
+        blinkId: blink._id,
+        count: settings.actions.length,
+      });
       actions = settings.actions.map((action: { label: string; value: string }) => ({
         label: action.label,
         href: `${baseUrl}/api/actions/${blink._id}?value=${encodeURIComponent(action.value)}`,
@@ -144,7 +153,11 @@ app.post(
             amount = settings.amounts[0];
           }
 
-          transaction = await transactionService.buildDonationTransaction(blink, userPubkey, amount);
+          transaction = await transactionService.buildDonationTransaction(
+            blink,
+            userPubkey,
+            amount,
+          );
           message = `Donated ${amount} SOL`;
           break;
         }
@@ -157,7 +170,7 @@ app.post(
             settings.tokenMint,
             settings.tokenSymbol,
             userPubkey,
-            amountSol
+            amountSol,
           );
 
           return res.json({
@@ -167,7 +180,11 @@ app.post(
         }
 
         case 'reveal': {
-          const result = await transactionService.buildRevealTransaction(blink, userPubkey, baseUrl);
+          const result = await transactionService.buildRevealTransaction(
+            blink,
+            userPubkey,
+            baseUrl,
+          );
           transaction = result.transaction;
           nextAction = result.nextAction;
           const settings = blink.settings as { price: number };
@@ -181,7 +198,7 @@ app.post(
             blink,
             userPubkey,
             ticketCount,
-            baseUrl
+            baseUrl,
           );
           transaction = result.transaction;
           nextAction = result.nextAction;
@@ -212,36 +229,39 @@ app.post(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
-app.post('/api/actions/:id/confirm_raffle', async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    const { account } = req.body;
-    if (!account) {
-      throw new AppError('Account required', 400);
+app.post(
+  '/api/actions/:id/confirm_raffle',
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { account } = req.body;
+      if (!account) {
+        throw new AppError('Account required', 400);
+      }
+
+      const blinkId = getParamString(req.params.id);
+      logger.info('Confirming raffle entry', { blinkId, account });
+
+      const blink = await blinkService.addRaffleEntry(blinkId, account);
+
+      if (!blink) {
+        throw new AppError('Blink not found', 404);
+      }
+
+      res.json({
+        type: 'completed',
+        title: 'Raffle Entry Confirmed!',
+        icon: blink.icon,
+        label: 'Done',
+        description: `Your wallet ${account.slice(0, 4)}...${account.slice(-4)} has been entered into the raffle.`,
+      });
+    } catch (error) {
+      next(error);
     }
-
-    const blinkId = getParamString(req.params.id);
-    logger.info('Confirming raffle entry', { blinkId, account });
-
-    const blink = await blinkService.addRaffleEntry(blinkId, account);
-
-    if (!blink) {
-      throw new AppError('Blink not found', 404);
-    }
-
-    res.json({
-      type: 'completed',
-      title: 'Raffle Entry Confirmed!',
-      icon: blink.icon,
-      label: 'Done',
-      description: `Your wallet ${account.slice(0, 4)}...${account.slice(-4)} has been entered into the raffle.`,
-    });
-  } catch (error) {
-    next(error);
-  }
-});
+  },
+);
 
 app.get(
   '/api/blinks',
@@ -262,7 +282,7 @@ app.get(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 app.delete('/api/blinks/:id', async (req: Request, res: Response, next: NextFunction) => {
@@ -298,7 +318,7 @@ app.post(
     } catch (error) {
       next(error);
     }
-  }
+  },
 );
 
 app.use(errorHandler);

@@ -1,7 +1,7 @@
 {
-  "name": "blink-builder-backend",
+  "name": "blinklet-backend",
   "version": "1.0.0",
-  "description": "Backend for No-Code Solana Blink Builder",
+  "description": "Backend API for Blinklet, a no-code builder for Solana Blinks",
   "main": "dist/server.js",
   "scripts": {
     "start": "node dist/server.js",
@@ -16,7 +16,6 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongoose": "^8.3.0",
-    "node-fetch": "^3.3.2",
     "winston": "^3.19.0",
     "winston-daily-rotate-file": "^5.0.0"
   },
@@ -24,9 +23,9 @@
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/node": "^25.1.0",
-    "nodemon": "^3.1.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
-  }
+  },
+  "license": "MIT"
 }

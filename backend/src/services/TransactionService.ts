@@ -24,7 +24,7 @@ export class TransactionService {
   async buildDonationTransaction(
     blink: BlinkDocument,
     userPubkey: PublicKey,
-    amount: number
+    amount: number,
   ): Promise<Transaction> {
     const settings = blink.settings as { recipient: string };
     const recipientPubkey = new PublicKey(settings.recipient);
@@ -40,7 +40,7 @@ export class TransactionService {
     transaction.add(
       ComputeBudgetProgram.setComputeUnitPrice({
         microLamports: config.fees.priorityFeeMicroLamports,
-      })
+      }),
     );
 
     transaction.add(
@@ -48,7 +48,7 @@ export class TransactionService {
         fromPubkey: userPubkey,
         toPubkey: recipientPubkey,
         lamports: Math.floor(amount * LAMPORTS_PER_SOL),
-      })
+      }),
     );
 
     return transaction;
@@ -57,7 +57,7 @@ export class TransactionService {
   async buildRevealTransaction(
     blink: BlinkDocument,
     userPubkey: PublicKey,
-    _baseUrl: string
+    _baseUrl: string,
   ): Promise<{ transaction: Transaction; nextAction: NextAction }> {
     const settings = blink.settings as { price: number; hiddenContent: string };
     const creatorPubkey = new PublicKey(blink.creatorWallet);
@@ -74,7 +74,7 @@ export class TransactionService {
     transaction.add(
       ComputeBudgetProgram.setComputeUnitPrice({
         microLamports: config.fees.priorityFeeMicroLamports,
-      })
+      }),
     );
 
     transaction.add(
@@ -82,7 +82,7 @@ export class TransactionService {
         fromPubkey: userPubkey,
         toPubkey: creatorPubkey,
         lamports,
-      })
+      }),
     );
 
     const nextAction: NextAction = {
@@ -103,7 +103,7 @@ export class TransactionService {
     blink: BlinkDocument,
     userPubkey: PublicKey,
     ticketCount: number,
-    baseUrl: string
+    baseUrl: string,
   ): Promise<{ transaction: Transaction; nextAction: NextAction }> {
     const settings = blink.settings as { ticketPrice: number };
     const creatorPubkey = new PublicKey(blink.creatorWallet);
@@ -123,7 +123,7 @@ export class TransactionService {
     transaction.add(
       ComputeBudgetProgram.setComputeUnitPrice({
         microLamports: config.fees.priorityFeeMicroLamports,
-      })
+      }),
     );
 
     transaction.add(
@@ -131,7 +131,7 @@ export class TransactionService {
         fromPubkey: userPubkey,
         toPubkey: creatorPubkey,
         lamports,
-      })
+      }),
     );
 
     const nextAction: NextAction = {

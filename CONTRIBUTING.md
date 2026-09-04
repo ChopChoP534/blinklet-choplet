@@ -1,4 +1,4 @@
-# Contributing to Blinklet Choplet
+# Contributing to Blinklet
 
 Thank you for your interest in contributing! This document provides guidelines and instructions for contributing to the project.
 
@@ -7,16 +7,18 @@ Thank you for your interest in contributing! This document provides guidelines a
 1. Fork the repository
 2. Clone your fork:
    ```bash
-   git clone https://github.com/your-username/blinklet-choplet.git
-   cd blinklet-choplet
+   git clone https://github.com/your-username/blinklet.git
+   cd blinklet
    ```
 3. Install dependencies:
    ```bash
-   cd backend && npm install
-   cd ../frontend && npm install
+   npm run install:all
    ```
-4. Set up environment variables (see README.md)
-5. Start development servers
+4. Set up environment variables (see [README.md](README.md#configuration))
+5. Start both development servers:
+   ```bash
+   npm run dev
+   ```
 
 ## Code Style Guidelines
 
@@ -30,7 +32,8 @@ Thank you for your interest in contributing! This document provides guidelines a
 ### Code Quality
 
 - **No Console Statements**: Use structured logging (Winston logger in backend)
-- **No Comments**: Write self-documenting code instead
+- **No Comments**: Write self-documenting code instead; name things so the comment is unnecessary
+- **Formatting**: Run `npm run format` before committing; Prettier config lives in `.prettierrc`
 - **Extract Constants**: No hardcoded values; use environment variables or constants
 - **Error Handling**: Always handle errors gracefully with proper error types
 
@@ -66,10 +69,12 @@ Thank you for your interest in contributing! This document provides guidelines a
 
 2. Make your changes following the code style guidelines
 
-3. Test your changes:
+3. Check your changes from the repository root:
    ```bash
-   cd backend && npm run type-check
-   cd frontend && npm run build
+   npm run format
+   npm run lint
+   npm run type-check
+   npm run build
    ```
 
 4. Commit with clear, descriptive messages:
@@ -105,10 +110,10 @@ Examples:
 
 Before submitting a PR:
 
-1. **Backend**: Ensure TypeScript compiles without errors
-2. **Frontend**: Ensure the app builds successfully
-3. **Manual Testing**: Test your changes in the browser
-4. **Edge Cases**: Test error scenarios and edge cases
+1. **Types**: `npm run type-check` passes for both packages
+2. **Lint**: `npm run lint` reports no errors
+3. **Build**: `npm run build` succeeds
+4. **Manual testing**: Exercise the change in the browser, including error paths
 
 ## Code Review Process
 

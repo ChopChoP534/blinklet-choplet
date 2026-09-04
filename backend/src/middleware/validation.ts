@@ -20,7 +20,7 @@ export const validateBlinkType = (type: string): type is BlinkType => {
 export const validateAccountMiddleware = (
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const { account } = req.body;
 
@@ -38,7 +38,7 @@ export const validateAccountMiddleware = (
 export const validateCreatorMiddleware = (
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const creator = getQueryString(req.query.creator) || req.body.creator;
 
@@ -56,7 +56,7 @@ export const validateCreatorMiddleware = (
 export const validateCreateBlinkMiddleware = (
   req: Request,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): void => {
   const payload = req.body as CreateBlinkPayload;
 

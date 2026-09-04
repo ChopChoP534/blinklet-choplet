@@ -40,7 +40,11 @@ export class BlinkService {
     }
 
     if (blink.creatorWallet !== creatorWallet) {
-      logger.warn('Unauthorized delete attempt', { id, creator: creatorWallet, owner: blink.creatorWallet });
+      logger.warn('Unauthorized delete attempt', {
+        id,
+        creator: creatorWallet,
+        owner: blink.creatorWallet,
+      });
       throw new AppError('Unauthorized to delete this Blink', 403);
     }
 
@@ -53,7 +57,7 @@ export class BlinkService {
     const blink = await Blink.findByIdAndUpdate(
       blinkId,
       { $push: { 'settings.entries': walletAddress } },
-      { new: true }
+      { new: true },
     );
 
     if (blink) {

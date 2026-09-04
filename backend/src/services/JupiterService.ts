@@ -11,7 +11,7 @@ export class JupiterService {
     tokenMint: string,
     tokenSymbol: string,
     userPubkey: PublicKey,
-    amountSol: number
+    amountSol: number,
   ): Promise<{ transaction: string; message: string }> {
     logger.info('Initiating Jupiter swap', {
       tokenMint,
@@ -40,7 +40,7 @@ export class JupiterService {
   private async getQuote(
     inputMint: string,
     outputMint: string,
-    amount: number
+    amount: number,
   ): Promise<JupiterQuoteResponse> {
     logger.debug('Fetching Jupiter quote', { inputMint, outputMint, amount });
 
@@ -64,7 +64,7 @@ export class JupiterService {
 
   private async getSwap(
     quoteResponse: JupiterQuoteResponse,
-    userPubkey: PublicKey
+    userPubkey: PublicKey,
   ): Promise<JupiterSwapResponse> {
     logger.debug('Fetching Jupiter swap transaction', { user: userPubkey.toString() });
 

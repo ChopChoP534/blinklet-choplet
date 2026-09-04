@@ -12,13 +12,13 @@ const consoleFormat = winston.format.combine(
       metaStr = ' ' + JSON.stringify(meta);
     }
     return `${timestamp} [${level}]: ${message}${metaStr}`;
-  })
+  }),
 );
 
 const jsonFormat = winston.format.combine(
   winston.format.timestamp(),
   winston.format.errors({ stack: true }),
-  winston.format.json()
+  winston.format.json(),
 );
 
 const transports: winston.transport[] = [];
@@ -27,13 +27,13 @@ if (isDevelopment) {
   transports.push(
     new winston.transports.Console({
       format: consoleFormat,
-    })
+    }),
   );
 } else {
   transports.push(
     new winston.transports.Console({
       format: jsonFormat,
-    })
+    }),
   );
 }
 
@@ -44,7 +44,7 @@ transports.push(
     level: 'error',
     format: jsonFormat,
     maxFiles: '14d',
-  })
+  }),
 );
 
 transports.push(
@@ -53,7 +53,7 @@ transports.push(
     datePattern: 'YYYY-MM-DD',
     format: jsonFormat,
     maxFiles: '14d',
-  })
+  }),
 );
 
 const logger = winston.createLogger({

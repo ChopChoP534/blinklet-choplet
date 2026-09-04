@@ -1,31 +1,30 @@
 {
-  "name": "blinks-creator-choplet",
+  "name": "blinklet",
   "version": "1.0.0",
-  "description": "No-Code Solana Blink Builder",
-  "main": "index.js",
-  "scripts": {
-    "start": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd backend && npm start",
-    "client": "cd frontend && npm run dev",
-    "build": "cd frontend && npm run build",
-    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install"
-  },
+  "private": true,
+  "description": "No-code builder for Solana Blinks",
+  "license": "MIT",
   "keywords": [
     "solana",
     "blinks",
-    "mern",
-    "nextjs"
+    "solana-actions",
+    "nextjs",
+    "typescript"
   ],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^9.1.0"
+  "scripts": {
+    "dev": "concurrently -n backend,frontend -c blue,magenta \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "build": "npm --prefix backend run build && npm --prefix frontend run build",
+    "start": "concurrently -n backend,frontend -c blue,magenta \"npm --prefix backend start\" \"npm --prefix frontend start\"",
+    "lint": "npm --prefix frontend run lint",
+    "type-check": "npm --prefix backend run type-check && npm --prefix frontend run type-check",
+    "install:all": "npm install && npm --prefix backend install && npm --prefix frontend install",
+    "format": "prettier --write \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx,css}\" \"frontend/*.{ts,mjs}\" \"*.json\"",
+    "format:check": "prettier --check \"backend/src/**/*.ts\" \"frontend/src/**/*.{ts,tsx,css}\" \"frontend/*.{ts,mjs}\" \"*.json\""
   },
-  "dependencies": {
-    "@radix-ui/react-slot": "^1.2.4",
-    "clsx": "^2.1.1",
-    "next-themes": "^0.4.6",
-    "sonner": "^2.0.7",
-    "tailwind-merge": "^3.4.0"
+  "devDependencies": {
+    "concurrently": "^9.1.0",
+    "prettier": "^3.9.6"
   }
 }

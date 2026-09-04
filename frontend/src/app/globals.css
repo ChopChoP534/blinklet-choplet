@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    var(--font-neue-haas), ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased dark:bg-black dark:text-slate-100;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold tracking-tight;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none cursor-pointer;
+  }
+  .btn-primary {
+    @apply bg-slate-900 text-white hover:bg-slate-800 focus:ring-slate-500 dark:bg-white dark:text-black dark:hover:bg-slate-200 dark:focus:ring-white;
+  }
+  .btn-secondary {
+    @apply bg-white text-slate-900 border border-slate-200 hover:bg-slate-50 focus:ring-slate-200 dark:bg-transparent dark:text-white dark:border-slate-800 dark:hover:bg-slate-900;
+  }
+  .input-field {
+    @apply mt-1 block w-full rounded-lg border-slate-300 shadow-sm focus:border-[#9945FF] focus:ring-[#9945FF] sm:text-sm px-3 py-2 border dark:bg-black dark:border-slate-800 dark:text-white dark:placeholder-slate-500 dark:focus:border-[#14F195] dark:focus:ring-[#14F195];
+  }
+  .card {
+    @apply bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden dark:bg-black dark:border-slate-800;
+  }
+  .wallet-adapter-button {
+    @apply !h-auto !px-4 !py-2 !text-sm !font-medium !rounded-lg;
+  }
+  .wallet-adapter-button-start-icon {
+    @apply !w-4 !h-4 !mr-2;
+  }
+}
