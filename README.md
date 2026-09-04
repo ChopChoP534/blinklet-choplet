@@ -1,179 +1,156 @@
-# Blinklet
+# Blinklet Choplet
 
-A no-code builder for [Solana Actions](https://solana.com/docs/advanced/actions) (Blinks) — shareable links that unfurl into interactive transaction buttons on X and any other Blink-aware client.
+A production-ready no-code platform for creating Solana Actions (Blinks) - onchain interactions that can be embedded anywhere on the internet.
 
-Build a donation link, a token swap, a pay-to-reveal drop, or a raffle from a form, then share the URL. No contract deployment, no frontend work.
+## Features
 
-## Contents
+- **Create Multiple Blink Types**
+  - **Donation**: Collect SOL donations with customizable amounts
+  - **Token Swap**: Enable SOL to SPL token swaps via Jupiter aggregator
+  - **Pay-to-Reveal**: Sell hidden content or exclusive links
+  - **Raffle**: Host onchain raffles with participant tracking
 
-- [How it works](#how-it-works)
-- [Blink types](#blink-types)
-- [Tech stack](#tech-stack)
-- [Getting started](#getting-started)
-- [Configuration](#configuration)
-- [Scripts](#scripts)
-- [API](#api)
-- [Project structure](#project-structure)
-- [Deployment notes](#deployment-notes)
-- [Contributing](#contributing)
-- [License](#license)
+- **Professional Dashboard**: Manage all your Blinks in one place
+- **Multi-Action Support**: Configure up to 3 custom action buttons per Blink
 
-## How it works
+## Tech Stack
 
-1. **Connect** a Phantom or Solflare wallet — this is the identity that owns the Blink.
-2. **Create** a Blink from a template and configure up to three action buttons.
-3. **Share** the returned URL. A Blink client fetches the Action metadata, renders the buttons, and posts back to build an unsigned transaction that the viewer signs in their own wallet.
+### Backend
+- **TypeScript**: Strict type safety and modern JavaScript features
+- **Express.js**: Fast, minimalist web framework
+- **MongoDB + Mongoose**: Document database with ODM
+- **Winston**: Professional logging with daily log rotation
+- **Solana Web3.js**: Blockchain interaction library
+- **Jupiter API**: Token swap aggregation
 
-The server never holds keys and never signs. It builds unsigned transactions; every transfer is signed client-side by the person taking the action.
+### Frontend
+- **Next.js 15**: React framework with App Router
+- **TypeScript**: Type-safe frontend development
+- **Tailwind CSS 4**: Utility-first styling
+- **Solana Wallet Adapter**: Seamless wallet connections
+- **Framer Motion**: Smooth animations
+- **Sonner**: Toast notifications
 
-## Blink types
+## Prerequisites
 
-| Type | What it does |
-| --- | --- |
-| **Donation** | Collects SOL to a fixed recipient, with preset amount buttons |
-| **Token Swap** | Swaps SOL for any SPL token, routed through the [Jupiter](https://jup.ag) aggregator |
-| **Pay-to-Reveal** | Charges SOL, then reveals hidden content inline after payment confirms |
-| **Raffle** | Sells tickets and records entrant wallets; the creator draws off-chain |
+- Node.js 18+ and npm
+- MongoDB (local or cloud)
+- Solana RPC endpoint (mainnet or devnet)
+- Domain verified by [Dialect](https://docs.dialect.to/blinks)
 
-> The raffle winner is drawn off-chain by the creator. That caveat is appended to every raffle description automatically — entrants are trusting the creator, not the chain.
+## Installation
 
-## Tech stack
-
-**Backend** — TypeScript, Express, MongoDB (Mongoose), Winston with daily log rotation, `@solana/web3.js`, Jupiter swap API.
-
-**Frontend** — Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS 4, Solana Wallet Adapter, Sonner.
-
-## Getting started
-
-### Prerequisites
-
-- Node.js 18+
-- MongoDB, local or hosted
-- A Solana RPC endpoint (the public mainnet endpoint is heavily rate-limited; use a dedicated provider for anything real)
-
-### Install
+### Backend Setup
 
 ```bash
-git clone https://github.com/your-username/blinklet.git
-cd blinklet
-npm run install:all
+cd backend
+npm install
 ```
 
-### Configure
+Create a `.env` file based on `.env.example`:
 
 ```bash
-cp backend/.env.example backend/.env
-cp frontend/.env.example frontend/.env.local
+cp .env.example .env
 ```
 
-Fill in at minimum `MONGO_URI` and `SOLANA_RPC_URL` in `backend/.env`. See [Configuration](#configuration).
+Configure your environment variables (see Configuration section below).
 
-### Run
+### Frontend Setup
 
 ```bash
-npm run dev
+cd frontend
+npm install
 ```
 
-Backend on `http://localhost:3001`, frontend on `http://localhost:3000`, both with hot reload.
+Create a `.env.local` file:
+
+```bash
+cp .env.example .env.local
+```
+
+Update with your backend API URL and share base URL.
 
 ## Configuration
 
-### Backend (`backend/.env`)
+### Backend Environment Variables
 
 | Variable | Description | Default |
-| --- | --- | --- |
+|----------|-------------|---------|
 | `PORT` | Server port | `3001` |
 | `NODE_ENV` | Environment mode | `development` |
 | `MONGO_URI` | MongoDB connection string | `mongodb://localhost:27017/blink-builder` |
 | `SOLANA_RPC_URL` | Solana RPC endpoint | `https://api.mainnet-beta.solana.com` |
 | `SOLANA_NETWORK` | Network identifier | `mainnet` |
-| `SOLANA_BLOCKCHAIN_ID` | CAIP-2 chain ID sent in the `X-Blockchain-Ids` header | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` |
+| `SOLANA_BLOCKCHAIN_ID` | Blockchain ID for Actions spec | `solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp` |
 | `CORS_ALLOWED_ORIGINS` | Comma-separated allowed origins | `*` |
-| `PRIORITY_FEE_MICRO_LAMPORTS` | Compute unit price for built transactions | `100000` |
+| `PRIORITY_FEE_MICRO_LAMPORTS` | Transaction priority fee | `100000` |
 | `JUPITER_QUOTE_API_URL` | Jupiter quote endpoint | `https://lite-api.jup.ag/swap/v1/quote` |
 | `JUPITER_SWAP_API_URL` | Jupiter swap endpoint | `https://lite-api.jup.ag/swap/v1/swap` |
-| `JUPITER_SLIPPAGE_BPS` | Swap slippage tolerance, in basis points | `50` |
-| `LOG_LEVEL` | `error`, `warn`, `info`, or `debug` | `info` |
+| `JUPITER_SLIPPAGE_BPS` | Swap slippage tolerance (basis points) | `50` |
+| `LOG_LEVEL` | Logging level (error/warn/info/debug) | `info` |
 
-### Frontend (`frontend/.env.local`)
+### Frontend Environment Variables
 
 | Variable | Description | Default |
-| --- | --- | --- |
+|----------|-------------|---------|
 | `NEXT_PUBLIC_API_URL` | Backend API base URL | `http://localhost:3001` |
-| `NEXT_PUBLIC_SHARE_BASE_URL` | Public origin used to build shareable Blink URLs | `http://localhost:3000` |
-| `NEXT_PUBLIC_ALLOWED_ORIGINS` | Comma-separated origins allowed for server actions | `localhost:3000` |
+| `NEXT_PUBLIC_SHARE_BASE_URL` | Frontend share URL | `http://localhost:3000` |
 
-Both `.env` files are gitignored. Never commit real credentials — `MONGO_URI` in particular usually carries a password.
+## Development
 
-## Scripts
+### Start Backend Development Server
 
-Run from the repository root:
-
-| Script | Description |
-| --- | --- |
-| `npm run dev` | Start backend and frontend together with hot reload |
-| `npm run build` | Compile the backend and produce a production frontend build |
-| `npm start` | Run both production servers |
-| `npm run lint` | Lint the frontend |
-| `npm run type-check` | Type-check both packages |
-| `npm run format` | Format with Prettier |
-| `npm run install:all` | Install root, backend, and frontend dependencies |
-
-## API
-
-All routes are served by the backend.
-
-| Method | Route | Description |
-| --- | --- | --- |
-| `GET` | `/api/actions/:id` | Action metadata — title, icon, description, and buttons |
-| `POST` | `/api/actions/:id` | Builds an unsigned transaction for the given account |
-| `POST` | `/api/actions/:id/confirm_raffle` | Records a raffle entry after payment confirms |
-| `POST` | `/api/create` | Creates a Blink |
-| `GET` | `/api/blinks?creator=<wallet>` | Lists a creator's Blinks |
-| `DELETE` | `/api/blinks/:id` | Deletes a Blink, verifying creator ownership |
-
-The `GET`/`POST` pair on `/api/actions/:id` implements the Solana Actions specification, including the `X-Action-Version` and `X-Blockchain-Ids` headers required by Blink clients.
-
-## Project structure
-
-```
-backend/
-  src/
-    config/        Environment-backed configuration
-    middleware/    Request validation and centralized error handling
-    models/        Mongoose schemas
-    services/      Blink storage, transaction building, Jupiter integration
-    types/         Shared TypeScript types
-    utils/         Logger and request helpers
-    server.ts      Express app and routes
-frontend/
-  src/
-    app/           App Router pages, plus the actions.json route
-    components/    Wizard, dashboard, interactive Blink renderer
-    config/        Public runtime configuration
-    lib/           Shared helpers
+```bash
+cd backend
+npm run dev
 ```
 
-## Deployment notes
+The backend will start on `http://localhost:3001` with hot reload enabled.
 
-- **Register your domain with Dialect.** Blink clients only unfurl links from domains on the [Dialect registry](https://docs.dialect.to/blinks); until you are registered, your links render as plain URLs.
-- **`actions.json` maps your public paths to the API.** It is served from the frontend at `/actions.json` and derives the API path from `NEXT_PUBLIC_API_URL`.
-- **Tighten CORS.** `CORS_ALLOWED_ORIGINS=*` is convenient locally; set explicit origins in production.
-- **Use a dedicated RPC.** The public mainnet endpoint will rate-limit a live Blink quickly.
-- **`next start` honors `PORT`.** Set it if you are not serving on 3000.
+### Start Frontend Development Server
 
-## Security
+```bash
+cd frontend
+npm run dev
+```
 
-- Every Solana address is validated before it reaches a transaction builder.
-- Blink payloads are validated per type in middleware before they are persisted.
-- Deletes verify that the requesting wallet is the creator.
-- Errors are logged with structure and returned without internal detail.
-- Transactions are returned unsigned and signed only by the end user's wallet.
+The frontend will start on `http://localhost:3000`.
 
-## Contributing
+### Type Checking
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, code style, and pull request guidelines.
+```bash
+cd backend
+npm run type-check
+```
+
+### Build for Production
+
+```bash
+cd backend
+npm run build
+npm start
+```
+
+```bash
+cd frontend
+npm run build
+npm start
+```
+
+## Security Features
+
+- **Request Validation**: All inputs validated before processing
+- **Wallet Verification**: Ownership verification for sensitive operations
+- **Solana Address Validation**: Prevents invalid address errors
+- **Transaction Signing**: All transactions signed by user wallet
+- **Error Handling**: Safe error messages without sensitive data leakage
+- **CORS Configuration**: Proper cross-origin resource sharing
+- **Environment Isolation**: Sensitive data in environment variables
 
 ## License
 
-[MIT](LICENSE) — built by [Choplet Studios](https://choplet.dev/).
+MIT License
+
+---
+
+Built by Choplet Studios
